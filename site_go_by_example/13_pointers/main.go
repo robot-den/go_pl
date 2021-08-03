@@ -2,11 +2,17 @@ package main
 
 import "fmt"
 
+type someStruct struct {
+	Value string
+}
+
 func main() {
 	runPointersExample(1)
 	runPointersExample("string")
 	runPointersExample(make(map[string]int))
 	runPointersExample(make([]int, 0, 3))
+	some := someStruct{Value: "text"}
+	runPointersExample(some)
 }
 
 func runPointersExample(i interface{}) {
@@ -19,6 +25,8 @@ func runPointersExample(i interface{}) {
 		runMapExample(t)
 	case []int:
 		runSliceExample(t)
+	case someStruct:
+		runStructExample(t)
 	default:
 		fmt.Println("Type is not supported")
 	}
@@ -87,3 +95,20 @@ func changeSlice(t []int) {
 func changeSliceP(t *[]int) {
 	*t = append(*t, 2)
 }
+
+func runStructExample(t someStruct) {
+	fmt.Println("Initial:", t)
+	changeStruct(t)
+	fmt.Println("By value:", t)
+	changeStructP(&t)
+	fmt.Println("By pointer:", t)
+}
+
+func changeStruct(t someStruct) {
+	t.Value += " by value"
+}
+
+func changeStructP(t *someStruct) {
+	(*t).Value += " by pointer"
+}
+
